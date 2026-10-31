@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- เมนูด้านข้าง -->
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <div>
+                <h2>Study Planner</h2>
+                <p>YOUR STUDY SPACE</p>
+            </div>
+            <button class="close-menu" id="closeMenu">×</button>
+        </div>
+
+        <p class="menu-label">เมนูหลัก</p>
+
+        <button class="nav-item active" data-target="home">
+            <span>⌂</span> หน้าหลัก
+        </button>
+
+        <button class="nav-item" data-target="timerSection">
+            <span>◷</span> ตัวจับเวลา
+        </button>
+
+        <button class="nav-item" data-target="historySection">
+            <span>📚</span> ประวัติการอ่าน
+        </button>
+
+        <button class="nav-item" data-target="achievementSection">
+            <span>🏆</span> ความสำเร็จ
+        </button>
+
+        <button class="nav-item" data-target="aboutSection">
+            <span>💡</span> เหตุผลที่จัดทำเว็บนี้
+        </button>
+
+        <div class="divider"></div>
+
+        <!-- สถิติ 7 วัน -->
+        <section class="weekly-card">
+            <h3>📊 สรุป 7 วันล่าสุด</h3>
+
+            <p class="muted">เวลาอ่านเฉลี่ยต่อวัน</p>
+            <div class="weekly-average" id="weeklyAverage">0 นาที</div>
+
+            <div class="weekly-total">
+                <span>เวลาอ่านรวม</span>
+                <strong id="weeklyTotal">0 ชม.</strong>
+            </div>
+
+            <div class="weekly-chart" id="weeklyChart"></div>
+            <p class="chart-caption">รวมวันนี้และ 6 วันก่อนหน้า</p>
+        </section>
+
+        <div class="sidebar-tip">
+            <span>💡</span>
+            <div>
+                <strong>อย่าลืมพักบ้างนะ</strong>
+                <p>อ่านทีละนิดอย่างสม่ำเสมอ</p>
+            </div>
+        </div>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- เนื้อหาหลัก -->
+    <main class="main-content" id="home">
+
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-button" id="menuButton" aria-label="เปิดเมนู">☰</button>
+                <div class="quick-menu" id="quickMenu">
+                    <button id="aboutMenuButton">
+                        เหตุผลที่จัดทำเว็บนี้💡
+                        </button>
+                </div>
+                <div>
+                    <p class="eyebrow">YOUR PERSONAL WORKSPACE</p>
+                    <h1>Study Planner <span>✦</span></h1>
+                </div>
+            </div>
+
+            <div class="data-pill" id="currentDate">วันนี้</div>
+        </header>
+
+        <!-- แบนเนอร์ -->
+        <section class="welcome-banner">
+            <div class="welcome-content">
+                <span class="welcome-tag">A LITTLE PROGRESS EVERY DAY</span>
+
+                <h2>มาอ่านหนังสือกัน<br>ให้เก่งขึ้นอีกนิดนะ ♡</h2>
+
+                <p>ความสำเร็จเริ่มจากการลงมือทำทีละวัน</p>
+
+                <button class="button button-white" id="bannerStart">
+                    ▶ เริ่มอ่านหนังสือ
+                </button>
+            </div>
+
+            <div class="banner-decoration" aria-hidden="true">
+                <div class="book">📖</div>
+                <span>✦</span>
+                <span>✧</span>
+            </div>
+        </section>
+
+        <!-- การ์ดสรุป -->
+        <section class="stats-grid">
+
+            <article class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon blue">◷</div>
+                    <span class="stat-tag">TODAY</span>
+                </div>
+
+                <p class="stat-label">เวลาอ่านวันนี้</p>
+                <div class="stat-value" id="todayStudy">0 <small>นาที</small></div>
+
+                <div class="progress-track">
+                    <div class="progress-fill" id="todayProgress"></div>
+                </div>
+
+                <p class="stat-note" id="todayGoalText">
+                    เริ่มต้นวันดี ๆ ด้วยการอ่านหนังสือ
+                </p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon orange">🔥</div>
+                    <span class="stat-tag">STREAK</span>
+                </div>
+
+                <p class="stat-label">อ่านติดต่อกัน</p>
+                <div class="stat-value" id="streakCount">0 <small>วัน</small></div>
+
+                <p class="stat-note" id="streakMessage">
+                    เริ่มสร้างสถิติของคุณวันนี้
+                </p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon purple">✧</div>
+                    <span class="stat-tag">ALL TIME</span>
+                </div>
+
+                <p class="stat-label">เวลาอ่านสะสม</p>
+                <div class="stat-value" id="totalStudy">0 <small>ชม.</small></div>
+
+                <p class="stat-note">ทุกชั่วโมงคือความก้าวหน้าของคุณ</p>
+            </article>
+
+        </section>
+
+        <!-- ตัวจับเวลา -->
+        <section class="content-card" id="timerSection">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">TIME TO FOCUS</p>
+                    <h2>เวลาแห่งการเรียนรู้ ✦</h2>
+                    <p class="muted">ค่อย ๆ อ่าน ไม่ต้องรีบร้อน</p>
+                </div>
+
+                <span class="timer-status" id="timerStatus">● พร้อมเริ่ม</span>
+            </div>
+
+            <div class="timer-layout">
+
+                <div class="timer-side">
+                    <div class="timer-ring" id="timerRing">
+                        <div class="timer-ring-inner">
+                            <span class="timer-book">📖</span>
+                            <div class="timer-display" id="timerDisplay">00:00:00</div>
+                            <p id="timerSubtext">ทุกนาทีมีความหมาย</p>
+                        </div>
+                    </div>
+
+                    <p class="save-status" id="saveStatus">
+                        ● บันทึกข้อมูลอัตโนมัติ
+                    </p>
+                </div>
+
+                <div class="timer-controls">
+                    <label for="subjectSelect">วันนี้กำลังอ่านวิชาอะไร?</label>
+
+                    <select id="subjectSelect">
+                        <option value="คณิตศาสตร์">📘 คณิตศาสตร์</option>
+                        <option value="ภาษาอังกฤษ">🌐 ภาษาอังกฤษ</option>
+                        <option value="วิทยาศาสตร์">🔬 วิทยาศาสตร์</option>
+                        <option value="ภาษาไทย">📖 ภาษาไทย</option>
+                        <option value="สังคมศึกษา">🌏 สังคมศึกษา</option>
+                         <option value="ฟิสิกส์">🧲 ฟิสิกส์</option>
+                          <option value="เคมี">🧪 เคมี</option>
+                        <option value="ชีววิทยา">🧬 ชีววิทยา</option>
+                        <option value="NETSAT คณิตศาสตร์">📘 NETSAT คณิตศาสตร์ </option>
+                        <option value="NETSAT ภาษาอังกฤษ">🌐 NETSAT ภาษาอังกฤษ</option>
+                        <option value="NETSAT ภาษาไทย">📖 NETSAT ภาษาไทย</option>
+                        <option value="NETSAT วิทยาศาสตร์และเทคโนโลยี">🔬  NETSAT วิทยาศาสตร์และเทคโนโลยี</option>
+                        <option value="NETSAT เคมี">🧪 NETSAT เคมี</option>
+                        <option value="NETSAT ชีววิทยา">🧬 NETSAT ชีววิทยา</option>
+                        <option value="NETSAT ฟิสิกส์">🧲 NETSAT ฟิสิกส์</option>
+                        <option value="TGAT1">📖 TGAT1</option>
+                        <option value="TGAT2">🔢 TGAT2</option>
+                        <option value="TGAT3">💼 TGAT3</option>
+                        <option value="TPAT1">🩺 TPAT1</option>
+                        <option value="TPAT2">🎨 TPAT2</option>
+                        <option value="TPAT3">⚙️ TPAT3</option>
+                        <option value="TPAT4">🏛️ TPAT4</option>
+                        <option value="TPAT5">👩‍🏫 TPAT5</option>
+                       
+                    </select>
+
+                    <div class="control-row">
+                        <button class="button button-primary" id="startButton">
+                            ▶ เริ่มอ่าน
+                        </button>
+
+                        <button class="button button-secondary" id="pauseButton" disabled>
+                            Ⅱ พัก
+                        </button>
+                    </div>
+
+                    <button class="button button-save" id="saveButton">
+                        ▣ บันทึกเวลาตอนนี้
+                    </button>
+
+                    <p class="timer-help" id="timerHelp">
+                        กดเริ่มเมื่อพร้อม และบันทึกเมื่ออ่านเสร็จ
+                    </p>
+
+                    <div class="focus-tip">
+                        💡
+                        <p>ลองวางโทรศัพท์ไว้ไกลตัว แล้วให้เวลากับสิ่งที่กำลังอ่านอย่างเต็มที่นะ</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ประวัติการอ่าน -->
+        <section class="content-card" id="historySection">
+            <div class="section-heading history-heading">
+                <div>
+                    <p class="eyebrow">YOUR JOURNEY</p>
+                    <h2>ประวัติการอ่าน ♡</h2>
+                    <p class="muted">ทุกครั้งที่ตั้งใจ คืออีกหนึ่งก้าวที่สำคัญ</p>
+                </div>
+
+                <span class="history-count" id="historyCount">0 รายการ</span>
+            </div>
+
+            <div class="history-list" id="historyList">
+                <div class="empty-state">
+                    <div>📚</div>
+                    <h3>ยังไม่มีประวัติการอ่าน</h3>
+                    <p>เริ่มอ่านหนังสือ แล้วประวัติของคุณจะแสดงตรงนี้</p>
+                </div>
+            </div>
+
+            <div class="history-footer">
+                <span>ข้อมูลเก็บไว้ในเบราว์เซอร์เครื่องนี้</span>
+                <button class="text-button" id="clearHistoryButton">
+                    ลบประวัติทั้งหมด
+                </button>
+            </div>
+        </section> <section class="content-card achievement-section" id="achievementSection">
+            <div class="section-heading">
+             <div>
+                <p class="eyebrow">YOUR ACHIEVEMENT</p>
+                <h2>ความสำเร็จ🏆</h2>
+                <p class="muted">ทุกนาทีที่กำลังอ่าน มันคือการสร้างอนาคตของตัวเราเองนะ</p>
+             </div>
+        </div>
+
+        <div class="achievement-summary">
+             <div>
+                <span>ความสำเร็จที่ปลดล็อกแล้ว</span>
+                <strong id="achievement-progress">0 / 9</strong>
+             </div>
+             <div class="achievement-progress">
+               <div id ="achievementProgress"></div>
+             </div>
+        </div>
+
+        <div class="achievement-grid" id="achievementGrid">
+
+         <div class="achievement-item locked" data-achievement="1">
+            <div class="achievement-icon">📚</div>
+            <h3>นักอ่านมือใหม่</h3>
+            <p>อ่านสะสมครบ 1 นาที</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+         
+         <div class="achievement-item locked" data-achievement="2">
+            <div class="achievement-icon">📒</div>
+            <h3>นักอ่านมีวิชา</h3>
+            <p>อ่านสะสมครบ 5 นาที</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+         <div class="achievement-item locked" data-achievement="3">
+            <div class="achievement-icon">🥉</div>
+            <h3>นักอ่านไม่ลดละ</h3>
+            <p>อ่านสะสมครบ 1 ชั่วโมง</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+          <div class="achievement-item locked" data-achievement="4">
+            <div class="achievement-icon">🥈</div>
+            <h3>นักอ่านผู้มุ่งมั่น</h3>
+            <p>อ่านสะสมครบ 3 ชั่วโมง</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+         <div class="achievement-item locked" data-achievement="5">
+            <div class="achievement-icon">🥇</div>
+            <h3>นักอ่านขั้นเทพ</h3>
+            <p>อ่านสะสมครบ 5 ชั่วโมง</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+          <div class="achievement-item locked" data-achievement="6">
+            <div class="achievement-icon">😈🔥</div>
+            <h3>ระดับปีศาจการอ่าน</h3>
+            <p>อ่านสะสมครบ 8 ชั่วโมง</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+          <div class="achievement-item locked" data-achievement="7">
+            <div class="achievement-icon">💎</div>
+            <h3>ผู้ปราชด้วยปัญญา</h3>
+            <p>อ่านสะสมครบ 20 ชั่วโมง</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+         <div class="achievement-item locked" data-achievement="8">
+            <div class="achievement-icon">👑</div>
+            <h3>เทพแห่งหนังสือ</h3>
+            <p>อ่านสะสมครบ 40 ชั่วโมง</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+         <div class="achievement-item locked" data-achievement="9">
+            <div class="achievement-icon">✨</div>
+            <h3>ผู้ตรัสรู้ด้านการเรียน</h3>
+            <p>อ่านสะสมครบ 100 ชั่วโมง</p>
+            <span class="achievement-status">ยังไม่ปลดล็อก</span>
+         </div>
+
+         </div>
+         </section>
+
+        <footer class="page-footer">
+            <section class="content-card" id="aboutSection">
+                <div class="section-heading">
+                </div>
+                <p class ="eyebrow">ABOUT THIS WEBSITE</p>
+                
+                <h2>เหตุผลที่จัดทำเว็บนี้💡</h2>
+                ที่มาและจุดประสงค์ในการทำเว็บไซส์
+            </p>
+        </div>
+    </div>
+
+    </div>
+            <p>
+
+                
+                เว็บไซต์ Study Planner จัดทำขึ้นเพื่อช่วยให้ผู้ใช้งาน
+                </p>
+            </div>
+            </section>
+            <span>✦ STUDY PLANNER</span>
+            <span>Small steps, big dreams.</span>
+        </footer>
+
+    </main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+</body>
+</html>
